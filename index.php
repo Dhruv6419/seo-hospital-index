@@ -1,0 +1,231 @@
+<?php
+require_once __DIR__ . "/includes/db.php";
+
+$doctors = [];
+$departments = [];
+$doctorQuery = "SELECT id, name, specialization, experience_years, photo_url, consultation_fee FROM doctors ORDER BY id ASC";
+$doctorResult = $conn->query($doctorQuery);
+
+if ($doctorResult && $doctorResult->num_rows > 0) {
+    while ($row = $doctorResult->fetch_assoc()) {
+        $doctors[] = $row;
+        if (!in_array($row["specialization"], $departments, true)) {
+            $departments[] = $row["specialization"];
+        }
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIVIL HOSPITAL</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container nav-wrap">
+            <h1>CIVIL HOSPITAL</h1>
+            <nav>
+                <a href="#home">Home</a>
+                <a href="#doctors">Doctors</a>
+                <a href="#departments">Departments</a>
+                <a href="#services">Services</a>
+                <a href="#patient-guide">Patient Guide</a>
+                <a href="#contact">Contact</a>
+                <a href="appointment.php">Book Appointment</a>
+                <a href="my_appointments.php">My Appointments</a>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h2>Trusted Care For Your Family</h2>
+            <p>Modern facilities, expert doctors and fast online appointment + payment system.</p>
+            <a class="btn" href="appointment.php">Book Now</a>
+        </div>
+    </section>
+
+    <section id="services" class="section container">
+        <h2>Our Services</h2>
+        <div class="grid three">
+            <div class="card">
+                <h3>Emergency Care</h3>
+                <p>24x7 emergency support with advanced ICU and trauma unit.</p>
+            </div>
+            <div class="card">
+                <h3>General Medicine</h3>
+                <p>Complete diagnosis and treatment for daily health concerns.</p>
+            </div>
+            <div class="card">
+                <h3>Surgery</h3>
+                <p>Planned and emergency surgeries with modern operation theatres.</p>
+            </div>
+            <div class="card">
+                <h3>Skin Care</h3>
+                <p>Dermatology consultation and treatment for skin and hair issues.</p>
+            </div>
+            <div class="card">
+                <h3>Psychiatry</h3>
+                <p>Mental health counseling, therapy sessions and specialist support.</p>
+            </div>
+            <div class="card">
+                <h3>Gastroenterology</h3>
+                <p>Digestive system diagnosis, endoscopy and expert treatment plans.</p>
+            </div>
+            <div class="card">
+                <h3>Laboratory</h3>
+                <p>Blood tests and diagnostics with fast and accurate reporting.</p>
+            </div>
+            <div class="card">
+                <h3>Pharmacy</h3>
+                <p>In-house pharmacy with essential medicines available all day.</p>
+            </div>
+            <div class="card">
+                <h3>Ambulance Service</h3>
+                <p>24x7 ambulance support for emergency patient transport.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="departments" class="section container">
+        <h2>Our Departments</h2>
+        <div class="grid three">
+            <?php if (count($departments) > 0): ?>
+                <?php foreach ($departments as $department): ?>
+                    <div class="card">
+                        <h3><?php echo htmlspecialchars($department); ?></h3>
+                        <p>Specialized care and consultation available in this department.</p>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No departments found yet.</p>
+            <?php endif; ?>
+        </div>
+    </section>
+
+    <section id="patient-guide" class="section light">
+        <div class="container">
+            <h2>Patient Guide / Information</h2>
+            <div class="grid two">
+                <div class="card">
+                    <h3>OPD Timings</h3>
+                    <p>Monday to Saturday: 9:00 AM to 6:00 PM</p>
+                    <p>Sunday: Emergency services only</p>
+                </div>
+                <div class="card">
+                    <h3>How To Book Appointment</h3>
+                    <p>1) Go to Book Appointment page</p>
+                    <p>2) Select patient name and doctor</p>
+                    <p>3) Choose date and submit form</p>
+                    <p>4) Complete payment to confirm</p>
+                </div>
+                <div class="card">
+                    <h3>Documents Required</h3>
+                    <p>- Valid phone number and email</p>
+                    <p>- Previous reports (if any)</p>
+                    <p>- ID proof for hospital records</p>
+                </div>
+                <div class="card">
+                    <h3>Payment Information</h3>
+                    <p>Accepted methods: UPI, Card, Cash</p>
+                    <p>Keep transaction reference for confirmation.</p>
+                    <p>For help call: +91 98765 43210</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="doctors" class="section light">
+        <div class="container">
+            <h2>Our Doctors</h2>
+            <input
+                type="text"
+                id="doctorSearch"
+                class="search-input"
+                placeholder="Search by doctor name or specialization"
+            >
+            <div class="grid three">
+                <?php if (count($doctors) > 0): ?>
+                    <?php foreach ($doctors as $doctor): ?>
+                        <div
+                            class="doctor-card"
+                            data-name="<?php echo strtolower(htmlspecialchars($doctor["name"])); ?>"
+                            data-specialization="<?php echo strtolower(htmlspecialchars($doctor["specialization"])); ?>"
+                        >
+                            <img src="<?php echo htmlspecialchars($doctor["photo_url"]); ?>" alt="<?php echo htmlspecialchars($doctor["name"]); ?>">
+                            <h3><?php echo htmlspecialchars($doctor["name"]); ?></h3>
+                            <p><?php echo htmlspecialchars($doctor["specialization"]); ?></p>
+                            <p>Experience: <?php echo (int) $doctor["experience_years"]; ?> years</p>
+                            <p>Fee: Rs. <?php echo number_format((float) $doctor["consultation_fee"], 2); ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No doctors found. Please import database SQL first.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
+
+    <section class="section container">
+        <h2>CIVIL HOSPITAL Gallery</h2>
+        <div class="grid two gallery-grid">
+            <div class="gallery-card">
+                <img src="https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Civil Hospital Main Building Exterior">
+                <p>Main Building (Outside View)</p>
+            </div>
+            <div class="gallery-card">
+                <img src="https://images.pexels.com/photos/1170979/pexels-photo-1170979.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Civil Hospital Emergency Entrance Exterior">
+                <p>Emergency Block (Outside View)</p>
+            </div>
+            <div class="gallery-card">
+                <img src="https://images.pexels.com/photos/236380/pexels-photo-236380.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Civil Hospital Reception Interior">
+                <p>Reception Area (Inside View)</p>
+            </div>
+            <div class="gallery-card">
+                <img src="https://images.pexels.com/photos/7089020/pexels-photo-7089020.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Civil Hospital Patient Ward Interior">
+                <p>Patient Care Area (Inside View)</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section container">
+        <h2>Patient Testimonials</h2>
+        <div class="grid three">
+            <div class="card">
+                <p>"Very smooth appointment process and excellent doctor support."</p>
+                <strong>- Priya S.</strong>
+            </div>
+            <div class="card">
+                <p>"Emergency team was fast and helpful. Great hospital services."</p>
+                <strong>- Raj M.</strong>
+            </div>
+            <div class="card">
+                <p>"Online payment and booking system is very easy to use."</p>
+                <strong>- Kiran P.</strong>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section light">
+        <div class="container">
+            <h2>Emergency Contact</h2>
+            <div class="card contact-card">
+                <p><strong>Emergency Helpline:</strong> 108 (Ambulance)</p>
+                <p><strong>Hospital Helpdesk:</strong> +91 98765 43210</p>
+                <p><strong>Email:</strong> support@civilhospital.com</p>
+                <p><strong>Address:</strong> Civil Hospital, Asarwa, Ahmedabad, Gujarat 380016</p>
+                <a class="btn" href="appointment.php">Book Appointment Now</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; <?php echo date("Y"); ?> CIVIL HOSPITAL. All rights reserved.</p>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
