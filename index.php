@@ -20,6 +20,7 @@ if ($doctorResult && $doctorResult->num_rows > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="-oILg1T98x0LgZsMc0IBir4He65L95yffOGjmHjL2Zw" />
     <title>CIVIL HOSPITAL</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
