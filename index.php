@@ -21,6 +21,7 @@ if ($doctorResult && $doctorResult->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="-oILg1T98x0LgZsMc0IBir4He65L95yffOGjmHjL2Zw" />
+    <meta name="google-site-verification" content="5kCXz5MNrLAkknHbnRKDZ4R9ijIZSrvGcYyAyyi0l5s" />
     <title>CIVIL HOSPITAL</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
