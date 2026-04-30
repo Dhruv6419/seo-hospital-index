@@ -1,20 +1,4 @@
-<?php
-require_once __DIR__ . "/includes/db.php";
 
-$doctors = [];
-$departments = [];
-$doctorQuery = "SELECT id, name, specialization, experience_years, photo_url, consultation_fee FROM doctors ORDER BY id ASC";
-$doctorResult = $conn->query($doctorQuery);
-
-if ($doctorResult && $doctorResult->num_rows > 0) {
-    while ($row = $doctorResult->fetch_assoc()) {
-        $doctors[] = $row;
-        if (!in_array($row["specialization"], $departments, true)) {
-            $departments[] = $row["specialization"];
-        }
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +8,14 @@ if ($doctorResult && $doctorResult->num_rows > 0) {
     <meta name="google-site-verification" content="5kCXz5MNrLAkknHbnRKDZ4R9ijIZSrvGcYyAyyi0l5s" />
     <title>CIVIL HOSPITAL</title>
     <link rel="stylesheet" href="assets/css/style.css">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T5H9KL3M2N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T5H9KL3M2N');
+</script> 
     
     <script type="application/ld+json">
     [
